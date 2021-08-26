@@ -21,13 +21,14 @@ class PostgresqlSpec extends AnyFlatSpec with TestContainerForAll {
       .appName("PostgresReaderJob")
       .getOrCreate()
 
-    spark
+    val df = spark
       .read
       .format("org.example.datasource.postgres")
       .option("url", postgresServer.jdbcUrl)
       .option("user", postgresServer.username)
       .option("password", postgresServer.password)
       .option("tableName", testTableName)
+      .option("partitionSize", "10")
       .load()
       .show()
 
